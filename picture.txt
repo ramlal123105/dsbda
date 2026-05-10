@@ -105,7 +105,7 @@ Area	Field
 Label	Species
 Color	Species
 Size	CNT(Iris.csv)
-Marks	Treemap
+
 Steps
 
 Click:
@@ -123,6 +123,13 @@ Color	Species
 Shape	Species
 Detail	Id
 Marks	Shape
+
+Network Diagram 
+
+Source - species
+target - measure values
+value - petal width
+details - id 
 
 Visualization Type	Best Graph
 1D	Histogram
