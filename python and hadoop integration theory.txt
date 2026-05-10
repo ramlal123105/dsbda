@@ -1,0 +1,74 @@
+Theory
+Experiment: Integration of Python with Hadoop using MapReduce on Forest Fire Dataset
+Aim
+
+To integrate Python with Hadoop and perform data analysis on the Forest Fire dataset using the MapReduce programming model in PyHadoop.
+
+Theory
+Hadoop
+
+Apache Hadoop is an open-source framework used for storing and processing large datasets in a distributed environment. It allows data to be processed across multiple computers efficiently.
+
+Hadoop mainly consists of:
+
+HDFS (Hadoop Distributed File System) – stores large amounts of data.
+MapReduce – processes and analyzes the data in parallel.
+MapReduce
+
+MapReduce is a programming model used in Hadoop for processing large datasets. It works in two phases:
+
+1. Map Phase
+Input data is divided into small chunks.
+The mapper processes each record and generates key-value pairs.
+
+Example:
+
+("fire", 1)
+2. Reduce Phase
+The reducer collects similar keys.
+It performs aggregation such as counting, summing, or averaging.
+
+Example:
+
+("fire", 150)
+PyHadoop
+
+PyHadoop is the integration of Python with Hadoop, where Python scripts are used as Mapper and Reducer programs. It allows users to perform big data analysis using Python instead of Java.
+
+Advantages:
+
+Easy to write and understand
+Faster development
+Useful for data analysis tasks
+Supports large-scale distributed processing
+Forest Fire Dataset
+
+The Forest Fire dataset contains information related to forest fire conditions such as:
+
+Temperature
+Humidity
+Wind
+Rain
+Burned area
+
+The dataset is analyzed using MapReduce to find useful insights such as:
+
+Total number of fire occurrences
+Average temperature
+Maximum burned area
+Frequency analysis
+Working of the Experiment
+Load the Forest Fire dataset into HDFS.
+Write Python Mapper and Reducer scripts.
+Execute MapReduce job using Hadoop Streaming.
+Process the dataset in distributed mode.
+Display the analyzed results.
+Applications
+Big data analytics
+Weather analysis
+Disaster prediction
+Environmental monitoring
+Large-scale data processing
+Conclusion
+
+Thus, Python was successfully integrated with Hadoop using PyHadoop, and data analysis was performed on the Forest Fire dataset using the MapReduce technique. The experiment demonstrated distributed processing and efficient handling of large datasets.
