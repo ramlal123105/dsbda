@@ -1,0 +1,38 @@
+Department of Information Technology 
+TE DSBDAL PRACTICAL LIST 
+Practical 
+No. 
+Title 
+1.  Design a distributed application using MapReduce  
+(Using Java) which processes a log file of a system. List out the users who 
+have logged for maximum period on the system. Use simple log file from the 
+Internet and process it using a pseudo distribution mode on Hadoop 
+platform. 
+2.  Write an application using HiveQL for flight information system which will 
+include a. Creating, Dropping, and altering Database tables. b. Creating an 
+external Hive table. c. Load table with data, insert new values and field in the 
+table, Join tables with Hive d. Create index on Flight Information Table e. 
+Find the average departure delay per day in 2008. 
+3.  Perform the following operations using Python on the Facebook metrics data 
+sets a. Create data subsets b. Merge Data c. Sort Data d. Transposing Data e. 
+Shape and reshape Data 
+4.  Perform the following operations using Python on the Air quality and Heart 
+Diseases data sets a. Data cleaning b. Data integration c. Data transformation 
+d. Error correcting e. Data model building 
+5.  Integrate Python and Hadoop and perform the following operations on 
+forest fire dataset a. Data analysis using the Map Reduce in PyHadoop 
+6.  Visualize the data using Python libraries matplotlib, seaborn by plotting the 
+graphs for on the Air quality and Heart Diseases data sets. 
+7.  Visualize the data using Python libraries matplotlib, seaborn by plotting the 
+graphs for forest fire dataset 
+8.  Perform the following data visualization operations using Tableau on Adult 
+datasets.  
+a. 1D (Linear) Data visualization b. 2D (Planar) Data Visualization c. 3D 
+(Volumetric) Data Visualization d. Temporal Data Visualization e. 
+Multidimensional Data Visualization f. Tree/ Hierarchical Data visualization 
+g. Network Data visualization 
+9.  Perform the following data visualization operations using Tableau on Iris 
+dataset. a. 1D (Linear) Data visualization b. 2D (Planar) Data Visualization c. 
+3D (Volumetric) Data Visualization d. Temporal Data Visualization e. 
+Multidimensional Data Visualization f. Tree/ Hierarchical Data visualization 
+g. Network Data visualization 
