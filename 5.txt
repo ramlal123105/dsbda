@@ -1,0 +1,244 @@
+5th prac
+
+
+
+
+
+
+
+
+
+
+
+This practical demonstrates how to process a dataset using **Hadoop Streaming**, which allows you to write MapReduce jobs in Python rather than Java. The goal is to calculate the total burned area of forest fires for each month.
+
+---
+
+## **Part 1: Setting up the Hadoop Environment**
+
+Before running code, you must initialize the Hadoop cluster and upload your data.
+
+* 
+**`start-dfs.sh`**: Starts the Distributed File System (NameNode and DataNodes).
+
+
+* 
+**`start-yarn.sh`**: Starts YARN (Yet Another Resource Negotiator), which manages the computing resources.
+
+
+* 
+**`hdfs dfs -mkdir /input`**: Creates a folder named "input" inside the Hadoop file system.
+
+
+* 
+**`hdfs dfs -put forestfires.csv /input/`**: Copies your local dataset file into the Hadoop "input" folder.
+
+
+* 
+**`hdfs dfs -ls /input/`**: A "check" command to list files and ensure the upload was successful.
+
+
+
+---
+
+## **Part 2: The Mapper (`mapper.py`)**
+
+The Mapper’s job is to filter and organize the raw data into key-value pairs.
+
+* 
+**`#!/usr/bin/env python3`**: The "shebang" line telling Hadoop to use Python 3 to run this script.
+
+
+* 
+**`import sys`**: Imports the system module to read data from "Standard Input" (the dataset).
+
+
+* 
+**`for line in sys.stdin:`**: Reads the dataset line by line.
+
+
+* **`if line.startswith("X"): continue`**: Checks if the line starts with "X" (the header row). If it does, it skips it to avoid math errors.
+
+
+* 
+**`data = line.split(",")`**: Splits the comma-separated line into a list of individual values.
+
+
+* 
+**`month = data[2]`**: Extracts the 3rd column, which represents the **Month**.
+
+
+* 
+**`area = float(data[12])`**: Extracts the 13th column (**Area**) and converts it to a decimal number.
+
+
+* **`print(f"{month}\t{area}")`**: Outputs the month and area separated by a tab. This becomes the input for the Reducer.
+
+
+
+---
+
+## **Part 3: The Reducer (`reducer.py`)**
+
+The Reducer receives the sorted list from the Mapper and aggregates the totals.
+
+* 
+**`current_month = None` & `total_area = 0**`: Initializes variables to track the month we are currently summing up.
+
+
+* 
+**`month, area = line.split("\t")`**: Splits the incoming line back into the month (key) and the area (value).
+
+
+* 
+**`if current_month == month:`**: If the month is the same as the previous line, add the area to the running total.
+
+
+* **`else:`**: If the month changes (e.g., from "mar" to "oct"):
+* 
+**`if current_month: print(...)`**: It prints the final total for the *finished* month.
+
+
+* 
+**`current_month = month`**: It switches to the new month.
+
+
+* 
+**`total_area = area`**: Resets the sum for the new month.
+
+
+
+
+* 
+**Final `print**`: After the loop finishes, this prints the very last month's total.
+
+
+
+---
+
+## **Part 4: Configuration & Execution**
+
+* 
+**`chmod +x mapper.py reducer.py`**: Makes the Python scripts executable so Hadoop can run them.
+
+
+* 
+**`mapred-site.xml` configuration**: You must tell Hadoop where your environment is located (e.g., `/root/hadoop`) so YARN can find the necessary libraries to run the job.
+
+
+* 
+**Running the Job**: The command `hadoop jar ...hadoop-streaming*.jar` triggers the MapReduce engine.
+
+
+* 
+**`-input / -output`**: Defines where the data is and where the results should go.
+
+
+* 
+**`-mapper / -reducer`**: Identifies your Python scripts.
+
+
+* 
+**`-file`**: Ships the Python scripts to every node in the cluster so they can process data locally.
+
+
+
+
+
+---
+
+## **Viva Questions & Answers**
+
+**Q1: What is the purpose of `sys.stdin` in your code?**
+**Ans:** In Hadoop Streaming, data is passed to the script via "Standard Input." `sys.stdin` allows Python to read that data stream line by line as if it were being typed into the console.
+
+**Q2: Why do we need to "Restart Hadoop" after editing `mapred-site.xml`?**
+**Ans:** Configuration files are loaded when the services start. To apply new settings like `mapreduce.framework.name` or environment paths, the DFS and YARN services must be refreshed.
+
+**Q3: What happens if the `/output_fire` folder already exists when you run the job?**
+**Ans:** Hadoop will throw an error and refuse to run the job. This is why the command `hdfs dfs -rm -r /output_fire` is used to clear old results before starting a new run.
+
+**Q4: How does Hadoop ensure the Reducer gets all "march" data together?**
+**Ans:** Between the Map and Reduce phases, Hadoop performs a **Shuffle and Sort**. It sorts all key-value pairs by the "key" (the month), ensuring the Reducer receives them in a continuous block.
+
+Would you like me to explain any specific part of the Python logic in more detail?
+
+
+
+
+
+Certainly! Here are more advanced viva questions and a deeper dive into the technical details of your MapReduce practical to help you ace your examination.
+
+---
+
+## **Extended Viva Questions & Answers**
+
+### **Q7: What is the "Shuffle and Sort" phase in MapReduce?**
+
+**Ans:** It is the intermediate phase between the Mapper and the Reducer. Hadoop automatically sorts the Mapper’s output keys (months) so that all values for the same key (e.g., all "mar" entries) are sent to the same Reducer in a single block. This makes aggregation possible.
+
+### **Q8: In your `mapper.py`, why use `f"{month}\t{area}"`?**
+
+**Ans:** Hadoop Streaming identifies the "Key" and the "Value" based on a tab character (`\t`) by default. Everything before the first tab is the Key (month), and everything after is the Value (area).
+
+### **Q9: What is the role of YARN in this practical?**
+
+**Ans:** YARN (Yet Another Resource Negotiator) acts as the "Operating System" for Hadoop. It allocates CPU and RAM across the cluster to run your Python scripts and monitors the progress of the MapReduce job.
+
+### **Q10: Why do we provide `-file mapper.py` and `-file reducer.py` in the run command?**
+
+**Ans:** In a real Hadoop cluster, the code needs to run on multiple different machines (nodes). The `-file` option tells Hadoop to ship (copy) your local Python scripts to every node that will be processing the data.
+
+### **Q11: What would happen if the `area` column in the CSV contained a non-numeric string?**
+
+**Ans:** The script would crash because `float(data[12])` cannot convert text to a number. To prevent this in a production environment, you would use a `try-except` block to handle "dirty data."
+
+### **Q12: How do you verify if the Hadoop services are running before starting the practical?**
+
+**Ans:** You can run the command `jps`. It will list all active Java processes like NameNode, DataNode, ResourceManager, and NodeManager.
+
+---
+
+## **Technical Breakdown of Configuration**
+
+### **The MapReduce Flow**
+
+### **Understanding the `mapred-site.xml` Entries**
+
+These lines are often the most confusing for students, so here is the line-by-line reason for them:
+
+* 
+**`<name>mapreduce.framework.name</name>`**: Tells Hadoop to use **YARN** to manage the job instead of the old, deprecated "classic" MapReduce.
+
+
+* 
+**`HADOOP_MAPRED_HOME=/root/hadoop`**: This tells the system exactly where the Hadoop software is installed on the computer.
+
+
+* 
+**`mapreduce.map.env` and `mapreduce.reduce.env**`: These lines ensure that when the Mapper and Reducer scripts start on different machines in the cluster, they have the correct environment settings to execute properly.
+
+
+
+### **Commands Summary Table**
+
+| Command | Purpose |
+| --- | --- |
+| `hdfs dfs -put` | Uploads data from local machine to HDFS.
+
+ |
+| `chmod +x` | Makes your Python scripts runnable programs.
+
+ |
+| `stop-all.sh` / `stop-dfs.sh` | Safely shuts down the Hadoop services.
+
+ |
+| `hadoop-streaming*.jar` | The engine that bridges Python scripts with Java Hadoop.
+
+ |
+
+---
+
+**Pro Tip for Viva:** If the examiner asks why you chose Python, explain that while Hadoop is Java-based, Python allows for faster development and easier data manipulation using libraries, which is why Hadoop Streaming is so valuable.
+
+Do you need help understanding a specific line of the Python logic, or should I explain the Hadoop file system (HDFS) more?
