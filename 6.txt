@@ -1,0 +1,1732 @@
+6th prac 
+
+
+
+
+
+import micropip
+await micropip.install("seaborn")
+
+
+
+import numpy as np
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+from sklearn.linear_model import LogisticRegression
+
+
+
+
+
+
+
+df = pd.read_csv("heart.csv")
+
+df.head()
+
+
+
+
+df = df.drop_duplicates()
+
+
+
+df.describe()
+
+
+
+df.info()
+
+
+
+df.isna().sum()
+
+
+
+
+
+df.head()
+
+
+
+df.fbs.unique()
+
+
+
+
+subSet1 = df[['age','cp','chol','thalach']]
+
+subSet2 = df[['exang','slope','target']]
+
+
+
+
+
+merged_df = subSet1.merge(right=subSet2, how='cross')
+
+merged_df.head()
+
+
+
+
+
+df.columns
+
+
+
+
+
+def remove_outliers(column):
+
+    Q1 = column.quantile(0.25)
+
+    Q3 = column.quantile(0.75)
+
+    IQR = Q3 - Q1
+
+    threshold = 1.5 * IQR
+
+    outlier_mask = (column < Q1 - threshold) | (column > Q3 + threshold)
+
+    return column[~outlier_mask]
+
+
+
+
+
+col_name = ['cp','thalach','exang','oldpeak','slope','ca']
+
+for col in col_name:
+
+    df[col] = remove_outliers(df[col])
+
+
+
+
+
+
+plt.figure(figsize=(10,6))
+
+for col in col_name:
+
+    sns.boxplot(data=df[col])
+
+    plt.title(col)
+
+    plt.show()
+
+
+
+
+df = df.dropna()
+
+df.isna().sum()
+
+
+
+
+
+
+
+df = df.drop('fbs', axis=1)
+
+
+
+correlations = df.corr()['target'].drop('target')
+
+print("Correlation with the Target:")
+
+print(correlations)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+plt.figure(figsize=(8,6))
+
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+
+plt.title("Correlation Heatmap")
+
+plt.show()
+
+
+
+
+
+
+
+
+
+x = df[['cp','thalach','exang','oldpeak','slope','ca']]
+
+y = df.target
+
+
+
+
+
+
+
+
+
+
+
+x_train, x_test, y_train, y_test = train_test_split(
+    x,
+    y,
+    test_size=0.2,
+    random_state=0
+)
+
+
+
+
+
+
+
+
+
+x_train.shape, x_test.shape, y_train.shape, y_test.shape
+
+
+
+
+
+
+
+scaler = StandardScaler()
+
+x_train_scaled = scaler.fit_transform(x_train)
+
+x_test_scaled = scaler.transform(x_test)
+
+
+
+
+
+
+y_train = np.array(y_train).reshape(-1,1)
+
+y_test = np.array(y_test).reshape(-1,1)
+
+
+
+
+
+
+
+model = LogisticRegression()
+
+
+
+
+
+
+
+
+model.fit(x_train_scaled, y_train)
+
+
+
+y_pred = model.predict(x_test_scaled)
+
+
+
+
+
+
+
+
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+
+
+
+
+
+
+
+
+
+
+
+
+
+from sklearn.tree import DecisionTreeClassifier
+
+
+
+
+
+
+tc = DecisionTreeClassifier(criterion='entropy')
+
+
+
+
+
+
+tc.fit(x_train_scaled, y_train)
+
+
+
+
+
+y_pred = tc.predict(x_test_scaled)
+
+
+
+
+
+print("Training Accuracy Score :",
+      accuracy_score(y_pred, y_test))
+
+print("Training Confusion Matrix :",
+      confusion_matrix(y_pred, y_test))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Heart Disease Dataset Practical
+
+Using Matplotlib and Seaborn
+
+This practical performs:
+
+* Data Cleaning
+* Data Integration
+* Error Correcting
+* Data Transformation
+* Data Model Building
+
+Based on your PDF. 
+
+---
+
+# Step 1: Install Seaborn (Online Jupyter)
+
+```python
+import micropip
+await micropip.install("seaborn")
+```
+
+---
+
+# Step 2: Import Libraries
+
+```python
+import numpy as np
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+from sklearn.linear_model import LogisticRegression
+```
+
+---
+
+# Step 3: Read Dataset
+
+```python
+df = pd.read_csv("heart.csv")
+
+df.head()
+```
+
+---
+
+# DATA CLEANING
+
+## Remove Duplicate Values
+
+```python
+df = df.drop_duplicates()
+```
+
+---
+
+## Display Statistical Information
+
+```python
+df.describe()
+```
+
+---
+
+## Dataset Information
+
+```python
+df.info()
+```
+
+---
+
+## Check Null Values
+
+```python
+df.isna().sum()
+```
+
+---
+
+# DATA INTEGRATION
+
+## Display Dataset
+
+```python
+df.head()
+```
+
+---
+
+## Unique Values
+
+```python
+df.fbs.unique()
+```
+
+---
+
+## Create Subsets
+
+```python
+subSet1 = df[['age','cp','chol','thalach']]
+
+subSet2 = df[['exang','slope','target']]
+```
+
+---
+
+## Merge Datasets
+
+```python
+merged_df = subSet1.merge(right=subSet2, how='cross')
+
+merged_df.head()
+```
+
+---
+
+# ERROR CORRECTING
+
+## Display Column Names
+
+```python
+df.columns
+```
+
+---
+
+## Remove Outliers Function
+
+```python
+def remove_outliers(column):
+
+    Q1 = column.quantile(0.25)
+
+    Q3 = column.quantile(0.75)
+
+    IQR = Q3 - Q1
+
+    threshold = 1.5 * IQR
+
+    outlier_mask = (column < Q1 - threshold) | (column > Q3 + threshold)
+
+    return column[~outlier_mask]
+```
+
+---
+
+## Remove Outliers from Columns
+
+```python
+col_name = ['cp','thalach','exang','oldpeak','slope','ca']
+
+for col in col_name:
+
+    df[col] = remove_outliers(df[col])
+```
+
+---
+
+# Boxplot Visualization
+
+```python
+plt.figure(figsize=(10,6))
+
+for col in col_name:
+
+    sns.boxplot(data=df[col])
+
+    plt.title(col)
+
+    plt.show()
+```
+
+---
+
+## Remove Null Values After Outlier Removal
+
+```python
+df = df.dropna()
+
+df.isna().sum()
+```
+
+---
+
+# Drop Unwanted Column
+
+```python
+df = df.drop('fbs', axis=1)
+```
+
+---
+
+# CORRELATION ANALYSIS
+
+## Compute Correlation
+
+```python
+correlations = df.corr()['target'].drop('target')
+
+print("Correlation with the Target:")
+
+print(correlations)
+```
+
+---
+
+# Heatmap Visualization
+
+```python
+plt.figure(figsize=(8,6))
+
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+
+plt.title("Correlation Heatmap")
+
+plt.show()
+```
+
+---
+
+# DATA SPLITTING
+
+```python
+x = df[['cp','thalach','exang','oldpeak','slope','ca']]
+
+y = df.target
+```
+
+---
+
+## Train Test Split
+
+```python
+x_train, x_test, y_train, y_test = train_test_split(
+    x,
+    y,
+    test_size=0.2,
+    random_state=0
+)
+```
+
+---
+
+## Check Shapes
+
+```python
+x_train.shape, x_test.shape, y_train.shape, y_test.shape
+```
+
+---
+
+# DATA TRANSFORMATION
+
+## Feature Scaling
+
+```python
+scaler = StandardScaler()
+
+x_train_scaled = scaler.fit_transform(x_train)
+
+x_test_scaled = scaler.transform(x_test)
+```
+
+---
+
+# DATA MODEL BUILDING
+
+# Logistic Regression Model
+
+```python
+y_train = np.array(y_train).reshape(-1,1)
+
+y_test = np.array(y_test).reshape(-1,1)
+```
+
+---
+
+## Create Model
+
+```python
+model = LogisticRegression()
+```
+
+---
+
+## Train Model
+
+```python
+model.fit(x_train_scaled, y_train)
+```
+
+---
+
+## Prediction
+
+```python
+y_pred = model.predict(x_test_scaled)
+```
+
+---
+
+## Accuracy
+
+```python
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Accuracy:", accuracy)
+```
+
+---
+
+# Decision Tree Classification
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+```
+
+---
+
+## Create Decision Tree Model
+
+```python
+tc = DecisionTreeClassifier(criterion='entropy')
+```
+
+---
+
+## Train Model
+
+```python
+tc.fit(x_train_scaled, y_train)
+```
+
+---
+
+## Prediction
+
+```python
+y_pred = tc.predict(x_test_scaled)
+```
+
+---
+
+## Accuracy and Confusion Matrix
+
+```python
+print("Training Accuracy Score :",
+      accuracy_score(y_pred, y_test))
+
+print("Training Confusion Matrix :",
+      confusion_matrix(y_pred, y_test))
+```
+
+---
+
+# Conclusion
+
+Thus, Heart Disease data was successfully processed using:
+
+* Data Cleaning
+* Data Integration
+* Error Correcting
+* Data Transformation
+* Logistic Regression
+* Decision Tree Classification
+
+Visualization was performed using Matplotlib and Seaborn.
+
+---
+# 6th Practical Explanation — Heart Disease Dataset
+
+Using:
+
+* Matplotlib
+* Seaborn
+* Machine Learning algorithms
+
+---
+
+# AIM
+
+To perform:
+
+* Data Cleaning
+* Data Integration
+* Error Correcting
+* Data Transformation
+* Data Visualization
+* Model Building
+
+on the Heart Disease dataset using Python.
+
+---
+
+# STEP-BY-STEP EXPLANATION
+
+---
+
+# 1. Install Seaborn
+
+```python id="0cn00j"
+import micropip
+await micropip.install("seaborn")
+```
+
+## Explanation
+
+* `micropip` installs packages in online Jupyter Notebook.
+* `seaborn` library is installed for visualization.
+
+---
+
+# 2. Import Libraries
+
+```python id="lq76cg"
+import numpy as np
+import pandas as pd
+```
+
+## Explanation
+
+* `numpy` → numerical operations
+* `pandas` → handling datasets
+
+---
+
+```python id="h5q2kn"
+from sklearn.model_selection import train_test_split
+```
+
+## Explanation
+
+Used to divide dataset into:
+
+* training data
+* testing data
+
+---
+
+```python id="gq7xmc"
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+## Explanation
+
+Used for:
+
+* graphs
+* plots
+* visualization
+
+---
+
+```python id="u42z7g"
+from sklearn.preprocessing import StandardScaler
+```
+
+## Explanation
+
+Used for feature scaling.
+
+Makes data values come into same range.
+
+---
+
+```python id="w8pq9x"
+from sklearn.metrics import accuracy_score, confusion_matrix
+```
+
+## Explanation
+
+Used to evaluate model performance.
+
+---
+
+```python id="u7m1gv"
+from sklearn.linear_model import LogisticRegression
+```
+
+## Explanation
+
+Imports Logistic Regression algorithm.
+
+Used for classification problems.
+
+---
+
+# 3. Read Dataset
+
+```python id="cv5yca"
+df = pd.read_csv("heart.csv")
+```
+
+## Explanation
+
+Reads CSV file into dataframe.
+
+---
+
+```python id="z4gqjt"
+df.head()
+```
+
+## Explanation
+
+Displays first 5 rows.
+
+Used to inspect dataset.
+
+---
+
+# 4. Data Cleaning
+
+```python id="7w87eu"
+df = df.drop_duplicates()
+```
+
+## Explanation
+
+Removes duplicate rows from dataset.
+
+Why?
+
+* duplicate data affects accuracy
+* increases redundancy
+
+---
+
+```python id="h52t7t"
+df.describe()
+```
+
+## Explanation
+
+Shows statistical summary:
+
+* mean
+* min
+* max
+* standard deviation
+* quartiles
+
+---
+
+```python id="khl9ty"
+df.info()
+```
+
+## Explanation
+
+Shows:
+
+* column names
+* datatype
+* null values
+* memory usage
+
+---
+
+```python id="p8qgph"
+df.isna().sum()
+```
+
+## Explanation
+
+Checks missing/null values in every column.
+
+---
+
+# 5. Data Integration
+
+```python id="7tbptx"
+subSet1 = df[['age','cp','chol','thalach']]
+subSet2 = df[['exang','slope','target']]
+```
+
+## Explanation
+
+Creates two smaller datasets from original dataset.
+
+---
+
+```python id="jgjp5l"
+merged_df = subSet1.merge(right=subSet2, how='cross')
+```
+
+## Explanation
+
+Merges two subsets together.
+
+`how='cross'`
+means cross join.
+
+---
+
+# 6. Error Correcting
+
+```python id="a8rzod"
+def remove_outliers(column):
+```
+
+## Explanation
+
+Function created to remove outliers.
+
+---
+
+# What are Outliers?
+
+Outliers are abnormal/extreme values.
+
+Example:
+
+* normal age: 30–70
+* outlier age: 200
+
+Outliers reduce model accuracy.
+
+---
+
+```python id="jlwm120"
+Q1 = column.quantile(0.25)
+Q3 = column.quantile(0.75)
+```
+
+## Explanation
+
+Calculates:
+
+* 25th percentile
+* 75th percentile
+
+---
+
+```python id="jlwm121"
+IQR = Q3 - Q1
+```
+
+## Explanation
+
+IQR = Inter Quartile Range
+
+Measures spread of middle values.
+
+IQR = Q_3 - Q_1
+
+---
+
+```python id="jlwm122"
+threshold = 1.5 * IQR
+```
+
+## Explanation
+
+Defines boundary for detecting outliers.
+
+---
+
+```python id="jlwm123"
+outlier_mask = (column < Q1 - threshold) | (column > Q3 + threshold)
+```
+
+## Explanation
+
+Detects values outside allowed range.
+
+---
+
+```python id="jlwm124"
+return column[~outlier_mask]
+```
+
+## Explanation
+
+Returns data after removing outliers.
+
+---
+
+# 7. Boxplot Visualization
+
+```python id="jlwm125"
+sns.boxplot(data=df[col])
+```
+
+## Explanation
+
+Boxplot is used to visualize:
+
+* median
+* quartiles
+* outliers
+
+---
+
+# 8. Remove Null Values
+
+```python id="jlwm126"
+df = df.dropna()
+```
+
+## Explanation
+
+Removes rows containing null values.
+
+---
+
+# 9. Drop Column
+
+```python id="jlwm127"
+df = df.drop('fbs', axis=1)
+```
+
+## Explanation
+
+Removes unnecessary column.
+
+`axis=1`
+means column operation.
+
+---
+
+# 10. Correlation Analysis
+
+```python id="jlwm128"
+correlations = df.corr()['target'].drop('target')
+```
+
+## Explanation
+
+Finds relationship between features and target column.
+
+---
+
+# What is Correlation?
+
+Correlation shows relationship between variables.
+
+Range:
+
+* +1 → strong positive
+* -1 → strong negative
+* 0 → no relation
+
+---
+
+# 11. Heatmap
+
+```python id="jlwm129"
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+```
+
+## Explanation
+
+Creates heatmap for correlation matrix.
+
+### Parameters:
+
+* `annot=True` → shows values
+* `cmap='coolwarm'` → color style
+
+---
+
+# 12. Data Splitting
+
+```python id="jlwm130"
+x = df[['cp','thalach','exang','oldpeak','slope','ca']]
+```
+
+## Explanation
+
+Independent variables/features.
+
+---
+
+```python id="jlwm131"
+y = df.target
+```
+
+## Explanation
+
+Dependent variable/output.
+
+---
+
+```python id="jlwm132"
+train_test_split()
+```
+
+## Explanation
+
+Splits dataset into:
+
+* training data (80%)
+* testing data (20%)
+
+---
+
+# 13. Data Transformation
+
+```python id="jlwm133"
+StandardScaler()
+```
+
+## Explanation
+
+Standardizes data.
+
+Formula:
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"z = \frac{x-\mu}{\sigma}"}}
+
+Where:
+
+* x = value
+* μ = mean
+* σ = standard deviation
+
+---
+
+# 14. Logistic Regression
+
+```python id="jlwm134"
+model = LogisticRegression()
+```
+
+## Explanation
+
+Creates Logistic Regression model.
+
+Used for binary classification.
+
+Example:
+
+* disease present
+* disease absent
+
+---
+
+```python id="jlwm135"
+model.fit(x_train_scaled, y_train)
+```
+
+## Explanation
+
+Trains the model.
+
+---
+
+```python id="jlwm136"
+y_pred = model.predict(x_test_scaled)
+```
+
+## Explanation
+
+Predicts output for test data.
+
+---
+
+# 15. Accuracy Score
+
+```python id="jlwm137"
+accuracy_score(y_test, y_pred)
+```
+
+## Explanation
+
+Measures prediction accuracy.
+
+Formula:
+
+Accuracy = \frac{Correct\ Predictions}{Total\ Predictions}
+
+---
+
+# 16. Decision Tree Classifier
+
+```python id="jlwm138"
+DecisionTreeClassifier(criterion='entropy')
+```
+
+## Explanation
+
+Creates Decision Tree model.
+
+`entropy`
+is used to measure impurity.
+
+---
+
+# 17. Confusion Matrix
+
+```python id="jlwm139"
+confusion_matrix(y_pred, y_test)
+```
+
+## Explanation
+
+Shows:
+
+* true positives
+* true negatives
+* false positives
+* false negatives
+
+---
+
+# VISUALIZATIONS USED
+
+1. Boxplot
+2. Heatmap
+
+---
+
+# OUTPUTS YOU GOT
+
+1. Statistical summary
+2. Dataset information
+3. Null value report
+4. Boxplots
+5. Correlation heatmap
+6. Logistic Regression accuracy
+7. Decision Tree accuracy
+8. Confusion matrix
+
+---
+
+# IMPORTANT TERMS
+
+| Term                | Meaning                         |
+| ------------------- | ------------------------------- |
+| Data Cleaning       | Removing duplicates/null values |
+| Data Integration    | Combining datasets              |
+| Outlier             | Abnormal value                  |
+| Heatmap             | Correlation visualization       |
+| Feature Scaling     | Standardizing data              |
+| Logistic Regression | Classification algorithm        |
+| Decision Tree       | Tree-based classification       |
+| Accuracy            | Correct prediction percentage   |
+
+---
+
+# VIVA QUESTIONS
+
+# Viva Questions with Answers — 6th Practical (Heart Disease Dataset)
+
+---
+
+# 1. What is data cleaning?
+
+## Answer:
+
+Data cleaning is the process of removing incorrect, duplicate, or missing data from a dataset to improve data quality and accuracy.
+
+---
+
+# 2. Why do we remove duplicate values?
+
+## Answer:
+
+Duplicate values increase redundancy and can reduce model accuracy. Removing duplicates makes the dataset cleaner and more reliable.
+
+---
+
+# 3. What are null values?
+
+## Answer:
+
+Null values are missing or empty values in a dataset.
+
+Example:
+
+* NaN
+* blank cells
+
+---
+
+# 4. What is Pandas?
+
+## Answer:
+
+pandas is a Python library used for:
+
+* data analysis
+* data manipulation
+* handling tables and datasets
+
+---
+
+# 5. What is NumPy?
+
+## Answer:
+
+NumPy is a Python library used for numerical and mathematical operations on arrays.
+
+---
+
+# 6. What is Matplotlib?
+
+## Answer:
+
+Matplotlib is a Python library used for creating graphs and charts.
+
+---
+
+# 7. What is Seaborn?
+
+## Answer:
+
+Seaborn is a visualization library built on Matplotlib that creates attractive statistical graphs.
+
+---
+
+# 8. What are outliers?
+
+## Answer:
+
+Outliers are abnormal or extreme values that are very different from other values in the dataset.
+
+Example:
+If most ages are between 30–70 and one value is 200, then 200 is an outlier.
+
+---
+
+# 9. Why remove outliers?
+
+## Answer:
+
+Outliers can:
+
+* reduce model accuracy
+* affect statistical calculations
+* create incorrect predictions
+
+So they are removed for better performance.
+
+---
+
+# 10. What is IQR?
+
+## Answer:
+
+IQR stands for Inter Quartile Range.
+
+Formula:
+
+IQR = Q_3 - Q_1
+
+It measures the spread of middle values in the dataset.
+
+---
+
+# 11. What is a boxplot?
+
+## Answer:
+
+A boxplot is a graph used to visualize:
+
+* median
+* quartiles
+* outliers
+* spread of data
+
+---
+
+# 12. Difference between null values and duplicate values?
+
+## Answer:
+
+| Null Values  | Duplicate Values  |
+| ------------ | ----------------- |
+| Missing data | Repeated data     |
+| Empty/NaN    | Same row repeated |
+
+---
+
+# 13. What is correlation?
+
+## Answer:
+
+Correlation shows the relationship between two variables.
+
+Range:
+
+* +1 → strong positive relation
+* -1 → strong negative relation
+* 0 → no relation
+
+---
+
+# 14. What is a heatmap?
+
+## Answer:
+
+A heatmap is a graphical representation of correlation using colors.
+
+It helps visualize relationships between dataset features.
+
+---
+
+# 15. What is `annot=True` in heatmap?
+
+## Answer:
+
+`annot=True` displays correlation values inside heatmap boxes.
+
+---
+
+# 16. What is Logistic Regression?
+
+## Answer:
+
+Logistic Regression is a supervised machine learning algorithm used for classification problems.
+
+Example:
+
+* disease present
+* disease absent
+
+---
+
+# 17. Why use Logistic Regression?
+
+## Answer:
+
+It is used because:
+
+* simple and fast
+* works well for binary classification
+* gives probability-based predictions
+
+---
+
+# 18. What is Decision Tree?
+
+## Answer:
+
+Decision Tree is a supervised learning algorithm that makes decisions using tree-like structures.
+
+---
+
+# 19. What is entropy in Decision Tree?
+
+## Answer:
+
+Entropy measures impurity or randomness in data.
+
+Lower entropy means better classification.
+
+---
+
+# 20. What is train_test_split()?
+
+## Answer:
+
+`train_test_split()` divides dataset into:
+
+* training data
+* testing data
+
+Training data trains the model and testing data checks performance.
+
+---
+
+# 21. Why use training data and testing data?
+
+## Answer:
+
+* Training data → teaches model
+* Testing data → evaluates model accuracy
+
+---
+
+# 22. What is feature scaling?
+
+## Answer:
+
+Feature scaling standardizes data values into the same range.
+
+It improves machine learning performance.
+
+---
+
+# 23. Why use StandardScaler?
+
+## Answer:
+
+`StandardScaler` standardizes features using mean and standard deviation.
+
+Formula:
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"z = \frac{x-\mu}{\sigma}"}}
+
+---
+
+# 24. What is normalization?
+
+## Answer:
+
+Normalization scales values into a fixed range such as 0 to 1.
+
+---
+
+# 25. What is a confusion matrix?
+
+## Answer:
+
+A confusion matrix shows:
+
+* true positives
+* true negatives
+* false positives
+* false negatives
+
+It evaluates classification performance.
+
+---
+
+# 26. What is accuracy score?
+
+## Answer:
+
+Accuracy score measures how many predictions are correct.
+
+Formula:
+
+Accuracy = \frac{Correct\ Predictions}{Total\ Predictions}
+
+---
+
+# 27. What is supervised learning?
+
+## Answer:
+
+Supervised learning is a machine learning method where the model learns using labeled data.
+
+Example:
+Input → Output already known.
+
+---
+
+# 28. What is the target column?
+
+## Answer:
+
+The target column is the output/dependent variable the model predicts.
+
+In this dataset:
+
+```python id="jlwm200"
+target
+```
+
+---
+
+# 29. Which algorithms were used in your practical?
+
+## Answer:
+
+Two algorithms were used:
+
+1. Logistic Regression
+2. Decision Tree Classifier
+
+---
+
+# 30. Explain your practical flow.
+
+## Answer:
+
+Steps performed:
+
+1. Imported libraries
+2. Loaded dataset
+3. Performed data cleaning
+4. Removed duplicates
+5. Checked null values
+6. Removed outliers
+7. Performed data integration
+8. Visualized data using boxplot and heatmap
+9. Split dataset into training/testing
+10. Applied feature scaling
+11. Built Logistic Regression model
+12. Built Decision Tree model
+13. Evaluated accuracy and confusion matrix
+
+---
+
+# 31. Why use heatmap in your practical?
+
+## Answer:
+
+Heatmap helps visualize correlation between dataset features and target column using colors.
+
+---
+
+# 32. Why remove the `fbs` column?
+
+## Answer:
+
+The column was removed because it had less importance in prediction and correlation analysis.
+
+---
+
+# 33. Why use `dropna()`?
+
+## Answer:
+
+`dropna()` removes rows containing null values to improve data quality.
+
+---
+
+# 34. What is `df.head()`?
+
+## Answer:
+
+`df.head()` displays the first 5 rows of the dataset.
+
+---
+
+# 35. What is `df.info()`?
+
+## Answer:
+
+`df.info()` gives:
+
+* column names
+* data types
+* non-null counts
+* memory usage
+
+---
+
+# 36. What is `df.describe()`?
+
+## Answer:
+
+`df.describe()` provides statistical summary such as:
+
+* mean
+* minimum
+* maximum
+* quartiles
+* standard deviation
+
+---
+
+# 37. Difference between Logistic Regression and Decision Tree?
+
+## Answer:
+
+| Logistic Regression   | Decision Tree             |
+| --------------------- | ------------------------- |
+| Statistical model     | Tree-based model          |
+| Linear classification | Rule-based classification |
+| Faster                | More interpretable        |
+
+---
+
+# 38. What is prediction in machine learning?
+
+## Answer:
+
+Prediction means forecasting output values using trained models.
+
+---
+
+# 39. What is model accuracy?
+
+## Answer:
+
+Model accuracy is the percentage of correct predictions made by the model.
+
+---
+
+# 40. Why is visualization important?
+
+## Answer:
+
+Visualization helps:
+
+* understand patterns
+* detect trends
+* identify outliers
+* analyze relationships in data
