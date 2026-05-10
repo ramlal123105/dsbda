@@ -1,0 +1,684 @@
+# Practical: Data Visualization Using Different Graph Types
+
+# Aim
+
+To study and implement different types of data visualizations using the Iris dataset for representing one-dimensional, two-dimensional, three-dimensional, temporal, multidimensional, hierarchical, and network relationships.
+
+---
+
+# Objective
+
+1. Understand graphical representation of data.
+2. Learn various visualization techniques.
+3. Analyze patterns and relationships in data.
+4. Use charts for better interpretation of datasets.
+
+---
+
+# Dataset Used
+
+Iris Dataset
+
+The Iris dataset contains flower measurements.
+
+## Attributes
+
+| Attribute       | Description       |
+| --------------- | ----------------- |
+| Sepal Length Cm | Length of sepal   |
+| Sepal Width Cm  | Width of sepal    |
+| Petal Length Cm | Length of petal   |
+| Petal Width Cm  | Width of petal    |
+| Species         | Flower type       |
+| Id              | Record identifier |
+
+---
+
+# 1. One-Dimensional Data Visualization
+
+# Graph Type: Histogram
+
+## Purpose
+
+Histogram is used to show frequency distribution of a single variable.
+
+It divides data into intervals called bins.
+
+---
+
+# Setup
+
+| Area    | Field                 |
+| ------- | --------------------- |
+| Columns | Sepal Length Cm (bin) |
+| Rows    | CNT(Iris.csv)         |
+| Marks   | Bar                   |
+
+---
+
+# Steps
+
+## Step 1
+
+Right-click:
+
+```text id="ks0g0x"
+Sepal Length Cm
+```
+
+## Step 2
+
+Select:
+
+```text id="5n2jlwm"
+Create → Bins
+```
+
+## Step 3
+
+Drag:
+
+* Sepal Length Bin → Columns
+* Count → Rows
+
+---
+
+# Explanation
+
+* X-axis shows ranges of sepal lengths.
+* Y-axis shows frequency/count.
+* Bars represent number of flowers in each range.
+
+---
+
+# Interpretation
+
+If tallest bar is between 5–6 cm:
+
+```text id="yj1e89"
+Most flowers have sepal length between 5 and 6 cm.
+```
+
+---
+
+# Advantages
+
+1. Easy frequency analysis
+2. Detects skewness
+3. Shows distribution clearly
+
+---
+
+# 2. Two-Dimensional Data Visualization
+
+# Graph Type: Scatter Plot
+
+## Purpose
+
+Used to show relationship between two numerical variables.
+
+---
+
+# Setup
+
+| Area    | Field           |
+| ------- | --------------- |
+| Columns | Sepal Length Cm |
+| Rows    | Petal Length Cm |
+| Color   | Species         |
+| Detail  | Id              |
+| Marks   | Circle          |
+
+---
+
+# Important Step
+
+Go to:
+
+```text id="yvvt8t"
+Analysis → Uncheck Aggregate Measures
+```
+
+OR add:
+
+```text id="9w9j79"
+Id → Detail
+```
+
+---
+
+# Explanation
+
+* Each dot represents one flower.
+* X-axis = Sepal Length
+* Y-axis = Petal Length
+* Color differentiates species.
+
+---
+
+# Interpretation
+
+If dots move upward:
+
+```text id="jlwmjp"
+Positive relationship exists.
+```
+
+Meaning:
+
+* Larger sepal length generally means larger petal length.
+
+---
+
+# Advantages
+
+1. Shows correlation
+2. Detects clusters
+3. Detects outliers
+
+---
+
+# 3. Three-Dimensional Data Visualization
+
+# Graph Type: Bubble Chart
+
+## Purpose
+
+Represents three variables together.
+
+---
+
+# Setup
+
+| Area    | Field           |
+| ------- | --------------- |
+| Columns | Petal Width Cm  |
+| Rows    | Petal Length Cm |
+| Size    | Sepal Length Cm |
+| Color   | Species         |
+| Detail  | Id              |
+| Marks   | Circle          |
+
+---
+
+# Explanation
+
+Bubble chart simulates 3D using:
+
+1. X-axis
+2. Y-axis
+3. Bubble size
+
+---
+
+# Interpretation
+
+* Larger bubbles = larger sepal length.
+* Different colors represent species.
+
+---
+
+# Advantages
+
+1. Displays multiple variables
+2. Easy comparison
+3. Attractive visualization
+
+---
+
+# 4. Temporal Data Visualization
+
+# Graph Type: Line Chart
+
+## Purpose
+
+Shows trend or sequential change over time/order.
+
+---
+
+# Setup
+
+| Area    | Field           |
+| ------- | --------------- |
+| Columns | Id              |
+| Rows    | Petal Length Cm |
+| Color   | Species         |
+| Detail  | Id              |
+| Marks   | Line            |
+
+---
+
+# Important Step
+
+Right-click:
+
+```text id="sfw9ec"
+ObservationID
+```
+
+Then:
+
+```text id="0yr4cq"
+Compute Using → Table Down
+```
+
+---
+
+# Explanation
+
+* X-axis represents sequence/order.
+* Y-axis represents petal length.
+* Lines show trend changes.
+
+---
+
+# Interpretation
+
+Increasing line means:
+
+```text id="ejj19u"
+Petal length increases over sequence.
+```
+
+---
+
+# Advantages
+
+1. Best for trends
+2. Shows changes clearly
+3. Easy time-series analysis
+
+---
+
+# 5. Multidimensional Data Visualization
+
+# Graph Type: Heat Map
+
+## Purpose
+
+Represents multiple variables using colors and size.
+
+---
+
+# Setup
+
+| Area    | Field           |
+| ------- | --------------- |
+| Columns | Sepal Length Cm |
+| Rows    | Species         |
+| Color   | Petal Length Cm |
+| Size    | Petal Width Cm  |
+| Marks   | Square          |
+
+---
+
+# Explanation
+
+* Color intensity represents value magnitude.
+* Square size represents another variable.
+
+---
+
+# Interpretation
+
+Dark color:
+
+```text id="i2dgad"
+Higher petal length
+```
+
+Large square:
+
+```text id="9j6nsg"
+Higher petal width
+```
+
+---
+
+# Advantages
+
+1. Shows patterns quickly
+2. Handles multiple variables
+3. Good for comparisons
+
+---
+
+# 6. Tree / Hierarchical Data Visualization
+
+# Graph Type: Treemap
+
+## Purpose
+
+Displays hierarchical or grouped data using rectangles.
+
+---
+
+# Setup
+
+| Area  | Field         |
+| ----- | ------------- |
+| Label | Species       |
+| Color | Species       |
+| Size  | CNT(Iris.csv) |
+| Marks | Treemap       |
+
+---
+
+# Steps
+
+Click:
+
+```text id="50mnsn"
+Show Me → Treemap
+```
+
+---
+
+# Explanation
+
+* Rectangle size represents quantity.
+* Different colors represent categories.
+
+---
+
+# Interpretation
+
+Large rectangle means:
+
+```text id="u0h0j7"
+Higher number of records
+```
+
+---
+
+# Advantages
+
+1. Space efficient
+2. Shows hierarchy
+3. Good categorical comparison
+
+---
+
+# 7. Network Data Visualization
+
+# Graph Type: Scatter Relationship Graph
+
+## Purpose
+
+Shows relationships and interactions between variables.
+
+---
+
+# Setup
+
+| Area    | Field           |
+| ------- | --------------- |
+| Columns | Sepal Length Cm |
+| Rows    | Petal Width Cm  |
+| Color   | Species         |
+| Shape   | Species         |
+| Detail  | Id              |
+| Marks   | Shape           |
+
+---
+
+# Explanation
+
+* Each point shows relationship between variables.
+* Shape and color identify categories.
+
+---
+
+# Interpretation
+
+Clustered points indicate:
+
+```text id="22gs94"
+Similar data behavior
+```
+
+---
+
+# Summary Table
+
+| Visualization Type | Best Graph                 |
+| ------------------ | -------------------------- |
+| 1D                 | Histogram                  |
+| 2D                 | Scatter Plot               |
+| 3D                 | Bubble Chart               |
+| Temporal           | Line Chart                 |
+| Multidimensional   | Heat Map                   |
+| Hierarchical       | Treemap                    |
+| Network            | Scatter Relationship Graph |
+
+---
+
+# Difference Between Graph Types
+
+| Graph         | Purpose                            |
+| ------------- | ---------------------------------- |
+| Histogram     | Frequency distribution             |
+| Scatter Plot  | Relationship between two variables |
+| Bubble Chart  | Relationship among three variables |
+| Line Chart    | Trends over time                   |
+| Heat Map      | Multivariable comparison           |
+| Treemap       | Hierarchical data                  |
+| Network Graph | Relationships/interactions         |
+
+---
+
+# Advantages of Data Visualization
+
+1. Easy understanding
+2. Quick analysis
+3. Detects patterns
+4. Improves decision making
+5. Simplifies large datasets
+6. Detects trends and outliers
+
+---
+
+# Limitations
+
+1. Misleading if poorly designed
+2. Large data may become cluttered
+3. Requires proper interpretation
+
+---
+
+# Applications of Data Visualization
+
+1. Business analytics
+2. Healthcare
+3. Weather forecasting
+4. Finance
+5. Machine learning
+6. Scientific research
+
+---
+
+# Most Important Viva Questions with Answers
+
+# 1. What is data visualization?
+
+Graphical representation of data for easy understanding and analysis.
+
+---
+
+# 2. Why is data visualization important?
+
+It helps identify trends, patterns, and relationships quickly.
+
+---
+
+# 3. What is a histogram?
+
+Histogram shows frequency distribution of continuous data.
+
+---
+
+# 4. What are bins in histogram?
+
+Bins are intervals used to group data values.
+
+---
+
+# 5. What is scatter plot?
+
+Scatter plot shows relationship between two numerical variables.
+
+---
+
+# 6. What is correlation?
+
+Correlation indicates relationship between variables.
+
+---
+
+# 7. What is positive correlation?
+
+When one variable increases, the other also increases.
+
+---
+
+# 8. What is bubble chart?
+
+Bubble chart displays three variables using X-axis, Y-axis, and bubble size.
+
+---
+
+# 9. Why is bubble chart considered 3D?
+
+Because bubble size acts as the third dimension.
+
+---
+
+# 10. What is line chart?
+
+Line chart shows trends over time or sequence.
+
+---
+
+# 11. What is heat map?
+
+Heat map uses colors to represent data intensity.
+
+---
+
+# 12. What is treemap?
+
+Treemap represents hierarchical data using rectangles.
+
+---
+
+# 13. What is multidimensional visualization?
+
+Visualization involving multiple variables simultaneously.
+
+---
+
+# 14. What is hierarchical data?
+
+Data organized in parent-child structure.
+
+---
+
+# 15. What is network visualization?
+
+Visualization showing relationships among entities.
+
+---
+
+# 16. What is the role of color in visualization?
+
+Color differentiates categories and highlights patterns.
+
+---
+
+# 17. Why use detail field in Tableau?
+
+To display each record separately.
+
+---
+
+# 18. What happens if Aggregate Measures is checked?
+
+Data gets grouped and individual records may not appear.
+
+---
+
+# 19. What is the purpose of line charts in temporal analysis?
+
+To identify trends and changes over time.
+
+---
+
+# 20. Which graph is best for frequency analysis?
+
+Histogram.
+
+---
+
+# 21. Which graph is best for relationship analysis?
+
+Scatter plot.
+
+---
+
+# 22. Which graph is best for hierarchical data?
+
+Treemap.
+
+---
+
+# 23. Which graph is best for trends?
+
+Line chart.
+
+---
+
+# 24. Which graph is best for multivariable analysis?
+
+Heat map or bubble chart.
+
+---
+
+# 25. What dataset is used in this practical?
+
+The Iris dataset.
+
+---
+
+# 26. What are dimensions in visualization?
+
+Categorical fields used for grouping.
+
+---
+
+# 27. What are measures in visualization?
+
+Numerical fields used for calculations.
+
+---
+
+# 28. What is Tableau?
+
+Tableau is a data visualization tool used for creating interactive charts and dashboards.
+
+---
+
+# 29. What are marks in Tableau?
+
+Marks define visual representation like bars, circles, squares, or lines.
+
+---
+
+# 30. Why is data visualization useful in machine learning?
+
+It helps understand patterns and relationships before model building.
+
+---
+
+# Conclusion
+
+This practical demonstrates different visualization techniques for analyzing datasets effectively. Different graph types are suitable for different kinds of data analysis such as frequency distribution, trend analysis, multidimensional comparison, and relationship detection.
